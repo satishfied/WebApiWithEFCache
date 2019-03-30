@@ -14,19 +14,19 @@ namespace WebApiWithEFCache.Controllers
 {
     public class AircraftController : ApiController
     {
-        private Entities db = new Entities();
+        private Entities db1 = new Entities();
 
         // GET: api/Aircraft
         public IQueryable<Aircraft> GetAircraft()
         {
-            return db.Aircraft;
+            return db1.Aircraft;
         }
 
         // GET: api/Aircraft/5
         [ResponseType(typeof(Aircraft))]
         public IHttpActionResult GetAircraft(int id)
         {
-            Aircraft aircraft = db.Aircraft.Find(id);
+            Aircraft aircraft = db1.Aircraft.Find(id);
             if (aircraft == null)
             {
                 return NotFound();
@@ -49,11 +49,11 @@ namespace WebApiWithEFCache.Controllers
                 return BadRequest();
             }
 
-            db.Entry(aircraft).State = EntityState.Modified;
+            db1.Entry(aircraft).State = EntityState.Modified;
 
             try
             {
-                db.SaveChanges();
+                db1.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -79,8 +79,8 @@ namespace WebApiWithEFCache.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.Aircraft.Add(aircraft);
-            db.SaveChanges();
+            db1.Aircraft.Add(aircraft);
+            db1.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = aircraft.Id }, aircraft);
         }
@@ -89,14 +89,14 @@ namespace WebApiWithEFCache.Controllers
         [ResponseType(typeof(Aircraft))]
         public IHttpActionResult DeleteAircraft(int id)
         {
-            Aircraft aircraft = db.Aircraft.Find(id);
+            Aircraft aircraft = db1.Aircraft.Find(id);
             if (aircraft == null)
             {
                 return NotFound();
             }
 
-            db.Aircraft.Remove(aircraft);
-            db.SaveChanges();
+            db1.Aircraft.Remove(aircraft);
+            db1.SaveChanges();
 
             return Ok(aircraft);
         }
@@ -105,14 +105,14 @@ namespace WebApiWithEFCache.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                db1.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private bool AircraftExists(int id)
         {
-            return db.Aircraft.Count(e => e.Id == id) > 0;
+            return db1.Aircraft.Count(e => e.Id == id) > 0;
         }
     }
 }
